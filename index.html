@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro - Student Placement Management System</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>PlacementPro</h1>
+                </div>
+                <p class="tagline">Student Placement Management System</p>
+            </div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Login As</label>
+                    <select id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="student">Student</option>
+                        <option value="admin">Admin</option>
+                        <option value="mentor">Mentor</option>
+                        <option value="recruiter">Recruiter</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="auth-btn">Login</button>
+                
+                <div class="auth-links">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+            
+            <div class="demo-accounts">
+                <h3>Demo Accounts</h3>
+                <div class="demo-grid">
+                    <button class="demo-btn" onclick="quickLogin('student')">
+                        <i class="fas fa-user-graduate"></i>
+                        Student Demo
+                    </button>
+                    <button class="demo-btn" onclick="quickLogin('admin')">
+                        <i class="fas fa-user-shield"></i>
+                        Admin Demo
+                    </button>
+                    <button class="demo-btn" onclick="quickLogin('mentor')">
+                        <i class="fas fa-user-tie"></i>
+                        Mentor Demo
+                    </button>
+                    <button class="demo-btn" onclick="quickLogin('recruiter')">
+                        <i class="fas fa-building"></i>
+                        Recruiter Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>PlacementPro</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- Navigation items will be populated by JavaScript -->
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">John Doe</span>
+                        <span class="user-role" id="userRole">Student</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="header-right">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search..." id="globalSearch">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    
+                    <div class="notifications">
+                        <button class="notification-btn" onclick="toggleNotifications()">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-count">3</span>
+                        </button>
+                        
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <button class="mark-all-read">Mark all as read</button>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>New job posted: Software Developer at TechCorp</p>
+                                        <span class="notification-time">2 minutes ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area" id="contentArea">
+                <!-- Content will be loaded here dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <div class="chatbot-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <span>PlacementBot</span>
+            <button class="chatbot-minimize">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm PlacementBot. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message..." id="chatInput" onkeypress="handleChatKeypress(event)">
+                <button onclick="sendMessage()" class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/student.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/mentor.js"></script>
+    <script src="js/recruiter.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
